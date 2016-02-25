@@ -11,7 +11,10 @@ var domFrom = require('dom-from'),
     supported = require('./lib/supported'),
     canClassList = window && ("document" in window.self) && ("classList" in document.createElement("_"));
 
-
+/*
+git remote add origin https://github.com/hollowdoor/classlist_enhanced.git
+git push -u origin master
+*/
 require('./lib/polyfillet');
 
 function ClassListEnhanced(element, doc){
