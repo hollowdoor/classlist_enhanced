@@ -1,6 +1,6 @@
 {
   "name": "classlist-enhanced",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "An enhanced classlist for the html DOM",
   "main": "index.js",
   "directories": {
