@@ -1,6 +1,11 @@
 classlist-enhanced
 ==================
 
+Install
+-------
+
+`npm install --save classlist-enhanced`
+
 Constructor
 -----------
 
@@ -119,6 +124,8 @@ There is a chance of wrong indexes if you alter the classes outside of `classlis
 A Simple Example
 ----------------
 
+### The CSS
+
 ```css
 .slidein {
     height: 100px;
@@ -140,6 +147,8 @@ A Simple Example
   }
 }
 ```
+
+### The Javascript
 
 ```javascript
 var classList = require('classlist-enhanced');
