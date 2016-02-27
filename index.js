@@ -1,5 +1,4 @@
-var domFrom = require('dom-from'),
-    Emitter = require('more-events').Emitter,
+var Emitter = require('more-events').Emitter,
     mix = require('./lib/mix'),
     classStyles = require('./lib/class_styles'),
     updateIndexes = require('./lib/update_indexes'),
