@@ -1,5 +1,5 @@
 var Emitter = require('more-events').Emitter,
-    mix = require('./lib/mix'),
+    mix = require('object-provide'),
     classStyles = require('./lib/class_styles'),
     updateIndexes = require('./lib/update_indexes'),
     optional = require('./lib/optional_methods'),
