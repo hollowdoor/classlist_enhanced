@@ -58,6 +58,9 @@ class ClassListEnhanced extends Emitter {
         updateIndexes(this);
         this.emit('toggle', name, result);
     }
+    item(index){
+        return this.classList.item(index);
+    }
     forEach(fn, ctx){
         return arrayFrom(this).forEach(fn, ctx);
     }
