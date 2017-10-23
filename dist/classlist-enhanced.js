@@ -1,4 +1,4 @@
-(function () {
+var classlistEnhanced = (function () {
 'use strict';
 
 //Most for use with gyre
@@ -615,6 +615,42 @@ var arrayFrom = (typeof Array.from === 'function' ?
   polyfill
 );
 
+function isElement(o){
+    var type = typeof Element; //HTMLElement maybe
+    return (
+    type === "object" || type === 'function'
+    ? o instanceof Element
+    //DOM2
+    : !!o
+        && typeof o === "object"
+        && o.nodeType === 1 //Definitely an Element
+        && typeof o.nodeName==="string"
+    );
+}
+
+function getElement(element, context){
+    if ( context === void 0 ) { context = document; }
+
+    if(typeof element === 'string'){
+        try{
+            return context.querySelector(element);
+        }catch(e){ throw e; }
+    }
+
+    if(isElement(element)) { return element; }
+
+    if(!!element && typeof element === 'object'){
+        if(isElement(element.element)){
+            return element.element;
+        }else if(isElement(element[0])){
+            return element[0];
+        }
+    }
+
+    throw new TypeError(("value (" + element + ") in isElement(value)\n    is not an element, valid css selector,\n    or object with an element property, or index 0."));
+
+}
+
 function updateIndexes(self){
     var classes = self.className.trim().split(' ');
     Array.prototype.splice.call(self, 0, self.length);
@@ -682,14 +718,16 @@ var Emitter = moreEvents.Emitter;
 var ClassListEnhanced = (function (Emitter) {
     function ClassListEnhanced(element, context){
         var this$1 = this;
+        if ( context === void 0 ) context = document;
 
         Emitter.call(this);
-        this.element = element;
+        this.element = getElement(element, context);
+        console.log('this.element ',this.element);
         this.length = 0;
 
-        this.classList = domClasslist(element);
+        this.classList = domClasslist(this.element);
 
-        var tracker = events.tracker();
+        var tracker = events.track();
         events(element, tracker)
         .on(eventNames$1.animationstart, function (event){
             return this$1.emit('animationstart', event);
@@ -729,7 +767,7 @@ var ClassListEnhanced = (function (Emitter) {
             this$1.classList.add(name);
         });
         updateIndexes(this);
-        this.emit('add', names);
+        return this.emit('add', names);
     };
     ClassListEnhanced.prototype.remove = function remove (){
         var this$1 = this;
@@ -740,12 +778,12 @@ var ClassListEnhanced = (function (Emitter) {
             this$1.classList.remove(name);
         });
         updateIndexes(this);
-        this.emit('remove', names);
+        return this.emit('remove', names);
     };
     ClassListEnhanced.prototype.toggle = function toggle (name, test){
         var result = this.classList.toggle(name, test);
         updateIndexes(this);
-        this.emit('toggle', name, result);
+        return this.emit('toggle', name, result);
     };
     ClassListEnhanced.prototype.item = function item (index){
         return this.classList.item(index);
@@ -767,6 +805,12 @@ var ClassListEnhanced = (function (Emitter) {
 
     return ClassListEnhanced;
 }(Emitter));
+
+function classList(element, context){
+    return new ClassListEnhanced(element, context);
+}
+
+return classList;
 
 }());
 //# sourceMappingURL=classlist-enhanced.js.map

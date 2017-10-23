@@ -1,6 +1,6 @@
 import moreEvents from 'more-events';
 import events from 'dom-eve';
-import classList from 'dom-classlist';
+import _classList from 'dom-classlist';
 import arrayFrom from 'array-from';
 import getElement from 'dom-get-element';
 import updateIndexes from './lib/update_indexes.js';
@@ -8,14 +8,15 @@ import eventNames from './lib/eventnames.js';
 const Emitter = moreEvents.Emitter;
 
 class ClassListEnhanced extends Emitter {
-    constructor(element, context){
+    constructor(element, context = document){
         super();
-        this.element = getElement(element);
+        this.element = getElement(element, context);
+        console.log('this.element ',this.element)
         this.length = 0;
 
-        this.classList = classList(this.element);
+        this.classList = _classList(this.element);
 
-        const tracker = events.tracker();
+        const tracker = events.track();
         events(element, tracker)
         .on(eventNames.animationstart, event=>{
             return this.emit('animationstart', event);
@@ -45,19 +46,19 @@ class ClassListEnhanced extends Emitter {
             this.classList.add(name);
         });
         updateIndexes(this);
-        this.emit('add', names);
+        return this.emit('add', names);
     }
     remove(...names){
         names.forEach(name=>{
             this.classList.remove(name);
         });
         updateIndexes(this);
-        this.emit('remove', names);
+        return this.emit('remove', names);
     }
     toggle(name, test){
         let result = this.classList.toggle(name, test);
         updateIndexes(this);
-        this.emit('toggle', name, result);
+        return this.emit('toggle', name, result);
     }
     item(index){
         return this.classList.item(index);
@@ -74,4 +75,8 @@ class ClassListEnhanced extends Emitter {
     reduce(fn, init){
         return arrayFrom(this).reduce(fn, init);
     }
+}
+
+export default function classList(element, context){
+    return new ClassListEnhanced(element, context);
 }

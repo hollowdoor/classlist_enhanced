@@ -1,7 +1,8 @@
 import moreEvents from 'more-events';
 import events from 'dom-eve';
-import classList from 'dom-classlist';
+import _classList from 'dom-classlist';
 import arrayFrom from 'array-from';
+import getElement from 'dom-get-element';
 
 function updateIndexes(self){
     var classes = self.className.trim().split(' ');
@@ -70,14 +71,16 @@ var Emitter = moreEvents.Emitter;
 var ClassListEnhanced = (function (Emitter) {
     function ClassListEnhanced(element, context){
         var this$1 = this;
+        if ( context === void 0 ) context = document;
 
         Emitter.call(this);
-        this.element = element;
+        this.element = getElement(element, context);
+        console.log('this.element ',this.element);
         this.length = 0;
 
-        this.classList = classList(element);
+        this.classList = _classList(this.element);
 
-        var tracker = events.tracker();
+        var tracker = events.track();
         events(element, tracker)
         .on(eventNames$1.animationstart, function (event){
             return this$1.emit('animationstart', event);
@@ -117,7 +120,7 @@ var ClassListEnhanced = (function (Emitter) {
             this$1.classList.add(name);
         });
         updateIndexes(this);
-        this.emit('add', names);
+        return this.emit('add', names);
     };
     ClassListEnhanced.prototype.remove = function remove (){
         var this$1 = this;
@@ -128,12 +131,12 @@ var ClassListEnhanced = (function (Emitter) {
             this$1.classList.remove(name);
         });
         updateIndexes(this);
-        this.emit('remove', names);
+        return this.emit('remove', names);
     };
     ClassListEnhanced.prototype.toggle = function toggle (name, test){
         var result = this.classList.toggle(name, test);
         updateIndexes(this);
-        this.emit('toggle', name, result);
+        return this.emit('toggle', name, result);
     };
     ClassListEnhanced.prototype.item = function item (index){
         return this.classList.item(index);
@@ -155,4 +158,10 @@ var ClassListEnhanced = (function (Emitter) {
 
     return ClassListEnhanced;
 }(Emitter));
+
+function classList(element, context){
+    return new ClassListEnhanced(element, context);
+}
+
+export default classList;
 //# sourceMappingURL=bundle.es.js.map
