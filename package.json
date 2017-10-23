@@ -2,7 +2,7 @@
   "name": "classlist-enhanced",
   "version": "1.0.6",
   "description": "An enhanced classlist for the html DOM",
-  "main": "index.js",
+  "main": "dist/bundle.js",
   "directories": {
     "test": "test"
   },
@@ -42,5 +42,7 @@
       "dest": "test/code.js",
       "src": "test/src.js"
     }
-  }
+  },
+  "jsnext:main": "dist/bundle.es.js",
+  "module": "dist/bundle.es.js"
 }
