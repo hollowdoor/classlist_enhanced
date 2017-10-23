@@ -2,6 +2,7 @@ import moreEvents from 'more-events';
 import events from 'dom-eve';
 import classList from 'dom-classlist';
 import arrayFrom from 'array-from';
+import getElement from 'dom-get-element';
 import updateIndexes from './lib/update_indexes.js';
 import eventNames from './lib/eventnames.js';
 const Emitter = moreEvents.Emitter;
@@ -9,10 +10,10 @@ const Emitter = moreEvents.Emitter;
 class ClassListEnhanced extends Emitter {
     constructor(element, context){
         super();
-        this.element = element;
+        this.element = getElement(element);
         this.length = 0;
 
-        this.classList = classList(element);
+        this.classList = classList(this.element);
 
         const tracker = events.tracker();
         events(element, tracker)
