@@ -16,16 +16,16 @@ class ClassListEnhanced extends Emitter {
         const tracker = events.track();
         events(element, tracker)
         .on(eventNames.animationstart, event=>{
-            return this.emit('animationstart', event);
+            return this.emit('animationstart', event, this.element);
         })
         .on(eventNames.animationend, event=>{
-            return this.emit('animationend', event);
+            return this.emit('animationend', event, this.element);
         })
         .on(eventNames.animationiteration, event=>{
-            return this.emit('animationiteration', event);
+            return this.emit('animationiteration', event, this.element);
         })
         .on(eventNames.transitionend, event=>{
-            return this.emit('transitionend', event);
+            return this.emit('transitionend', event, this.element);
         });
 
         this.destroy = function(){

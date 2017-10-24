@@ -9,22 +9,24 @@ Install
 Constructor
 -----------
 
-### classList(element, context) -> object
+### classList(element|selector, document) -> object
 
-See [dom-get-element](https://github.com/hollowdoor/dom_get_element) to see what you can pass as `element`.
+Pass a DOM element, or a CSS selector as the first argument.
 
-`context` is optional. `context` is the top level element passed to `getElement(element, context)` from the `dom-get-element` module if you passed a selector for `element`.
+The `document` argument is an optional argument.
+
+Most of the time you shouldn't have to pass a `document` object, but maybe there is a virtual DOM for node that would work.
 
 classList Methods
 -----------------
 
 These methods work exactly like a regular DOM element's [classList](https://developer.mozilla.org/en-US/docs/Web/API/Element/classList) methods.
 
--	classList.contains(string)
--	classList.add(...strings)
--	classList.remove(...strings)
--	classList.oggle(string, boolean)
--	classList.item(integer)
+-	contains(string)
+-	add(string, ...)
+-	remove(string, ...)
+-	toggle(string, boolean)
+-	item(integer)
 
 Array like methods
 ------------------
@@ -33,14 +35,18 @@ These methods work exactly like they would on an [array](https://developer.mozil
 
 The default context of the array like methods is the `classlist-enhanced` instance.
 
--	classList.forEach(function, context|undefined)
--	classList.map(function, context|undefined)
--	classList.filter(function, context|undefined)
--   classList.reduce(function, initialValue)
+-	forEach(function, context|undefined)
+-	map(function, context|undefined)
+-	filter(function, context|undefined)
 
+There is no `reduce` method because it's hard to think of a good purpose for it.
 
 Special Methods
 ---------------
+
+### toggleAll(string, ..., boolean)
+
+Toggle multiple class strings with an optional `bool` like `classList.toggle`.
 
 ### on(event, listener)
 
@@ -51,45 +57,17 @@ Set one of these events:
 -	animationend
 -	transitionend
 
-```javascript
-import classList from 'classlist-enhanced';
-
-let cl = classList('#some-element');
-cl.on('transitionend', (event, element)=>{
-    //event is the usual DOM event
-    //element is the element you passed to classList(element)
-})
-```
-
-These events correspond to classList methods:
-
-### events "add", "remove"
-
-```javascript
-import classList from 'classlist-enhanced';
-
-let cl = classList('#some-element');
-cl.on('add', addedClasses=>{
-    //Fired on cl.add(className);
-}).on('remove', addedClasses=>{
-    //Fired on cl.remove(className);
-});
-```
-
-### event "toggle"
-
-```javascript
-import classList from 'classlist-enhanced';
-
-let cl = classList('#some-element');
-cl.on('toggle', (toggledClass, isToggled)=>{
-    //isToggled is the return value of classList.toggle(className);
-});
-```
-
 Other events can be set, but you'll have to emit them yourself.
 
+#### listener(element, event)
 
+A listener is a function callback.
+
+The **element** parameter is the current element.
+
+The **event** parameter is a special event object that mirrors animation, and transition events.
+
+The **event** object has all the fields of [Event](https://developer.mozilla.org/en-US/docs/Web/API/Event) as well as [AnimationEvent](https://developer.mozilla.org/en-US/docs/Web/API/AnimationEvent), or [TransitionEvent](https://developer.mozilla.org/en-US/docs/Web/API/TransitionEvent).
 
 These are the extra fields for the **event** object.
 
@@ -106,7 +84,7 @@ Remove an event listener.
 
 Add a one time event listener.
 
-### emit(event, ...args)
+### emit(event, argument, ...)
 
 Emit an event for the listeners set with the on method.
 
@@ -232,6 +210,6 @@ There has been some work put into making classList functionality work cross brow
 
 Even if animations, and transitions aren't usable in a certain environment at least the class changes will work so in that sense **classlist-enhanced** is as backwards compatible as the actual DOM `classList`.
 
-You will need browserify, rollup or some other module compiler that works with es2015/commonjs modules to use this library.
+You will need *browserify*, or some other module compiler that works with commonjs modules to use this library.
 
 Happy coding!
