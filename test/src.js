@@ -18,6 +18,7 @@ show(cl);
 cl.add('thing1', 'thing2');
 cl.map(n=>n).forEach(name=>console.log('forEach name ', name))
 
+
 function show(cl){
     console.log('html ', cl.element.outerHTML);
 }

@@ -6,6 +6,19 @@ Install
 
 `npm install --save classlist-enhanced`
 
+Version 2 differences
+--------
+
+Version 2:
+
+* uses `dom-get-element` for it's constructor
+* doesn't have the `supports()` static method
+* is designed using es2015 syntax
+* has "add", "remove", and "toggle" events
+* uses normal transition/animation events
+
+See the README_version1.md for version 1 documentation.
+
 Constructor
 -----------
 
@@ -200,28 +213,6 @@ Supporting Non-CSS3 Environments
 
 **classlist-enhanced** will work in most environments, but if the animation, and transition events aren't available you will see some side effects. For the rare possibility of no events you should be aware that critical code inside listeners will not work. Emphasis is on rare as most modern browsers do support these events.
 
-If you must support really old browsers you can use the supported static method:
-
-#### supported(string, callback) -> boolean
-
-```javascript
-var classList = require('classlist-enhanced');
-classList.supported('animation', function(){
-    console.log('animation is supported')
-});
-
-classList.supported('transition', function(){
-    console.log('transition is supported')
-});
-```
-
-classList.supported only checks if there is support for CSS3 animations, or transitions.
-
-The `callback` runs when support for the chosen functionality is verified.
-
-Set your CSS3 events inside the supported callback if you're really worried about old browsers messing up your events.
-
-You still need to set your CSS3 prefixes in your style sheets.
 
 About
 -----

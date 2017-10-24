@@ -3,6 +3,7 @@ import events from 'dom-eve';
 import _classList from 'dom-classlist';
 import arrayFrom from 'array-from';
 import getElement from 'dom-get-element';
+import classStyles from 'dom-class-styles';
 import updateIndexes from './lib/update_indexes.js';
 import eventNames from './lib/eventnames.js';
 
@@ -75,6 +76,23 @@ class ClassListEnhanced extends Emitter {
     }
 }
 
+if(Symbol && Symbol.iterator){
+    ClassListEnhanced.prototype[Symbol.iterator] = function(){
+        let index = -1, self = this;
+        return {
+            next: function(){
+                if(++index < self.length){
+                    return {done: false, value: self[index]};
+                }else{
+                    return {done: true};
+                }
+            }
+        };
+    };
+}
+
 export default function classList(element, context){
     return new ClassListEnhanced(element, context);
 }
+
+classList.classStyles = classStyles;

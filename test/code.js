@@ -752,28 +752,27 @@ var ClassListEnhanced = (function (Emitter$$1) {
 
         Emitter$$1.call(this);
         this.element = getElement(element, context);
-        console.log('this.element ',this.element);
         this.length = 0;
-
         this.classList = domClasslist(this.element);
 
         var tracker = events.track();
         events(element, tracker)
         .on(eventNames$1.animationstart, function (event){
-            return this$1.emit('animationstart', event);
+            return this$1.emit('animationstart', event, this$1.element);
         })
         .on(eventNames$1.animationend, function (event){
-            return this$1.emit('animationend', event);
+            return this$1.emit('animationend', event, this$1.element);
         })
         .on(eventNames$1.animationiteration, function (event){
-            return this$1.emit('animationiteration', event);
+            return this$1.emit('animationiteration', event, this$1.element);
         })
         .on(eventNames$1.transitionend, function (event){
-            return this$1.emit('transitionend', event);
+            return this$1.emit('transitionend', event, this$1.element);
         });
 
         this.destroy = function(){
             tracker.clear();
+            this.dispose();
         };
     }
 
@@ -839,6 +838,21 @@ var ClassListEnhanced = (function (Emitter$$1) {
 
     return ClassListEnhanced;
 }(Emitter));
+
+if(Symbol && Symbol.iterator){
+    ClassListEnhanced.prototype[Symbol.iterator] = function(){
+        var index = -1, self = this;
+        return {
+            next: function(){
+                if(++index < self.length){
+                    return {done: false, value: self[index]};
+                }else{
+                    return {done: true};
+                }
+            }
+        };
+    };
+}
 
 function classList(element, context){
     return new ClassListEnhanced(element, context);
