@@ -3,6 +3,7 @@ import events from 'dom-eve';
 import _classList from 'dom-classlist';
 import arrayFrom from 'array-from';
 import getElement from 'dom-get-element';
+import classStyles from 'dom-class-styles';
 
 function updateIndexes(self){
     var classes = self.className.trim().split(' ');
@@ -174,6 +175,8 @@ if(Symbol && Symbol.iterator){
 function classList(element, context){
     return new ClassListEnhanced(element, context);
 }
+
+classList.classStyles = classStyles;
 
 export default classList;
 //# sourceMappingURL=bundle.es.js.map

@@ -7,6 +7,7 @@ var events = _interopDefault(require('dom-eve'));
 var _classList = _interopDefault(require('dom-classlist'));
 var arrayFrom = _interopDefault(require('array-from'));
 var getElement = _interopDefault(require('dom-get-element'));
+var classStyles = _interopDefault(require('dom-class-styles'));
 
 function updateIndexes(self){
     var classes = self.className.trim().split(' ');
@@ -178,6 +179,8 @@ if(Symbol && Symbol.iterator){
 function classList(element, context){
     return new ClassListEnhanced(element, context);
 }
+
+classList.classStyles = classStyles;
 
 module.exports = classList;
 //# sourceMappingURL=bundle.js.map

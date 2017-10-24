@@ -16,6 +16,7 @@ Version 2:
 * is designed using es2015 syntax
 * has "add", "remove", and "toggle" events
 * uses normal transition/animation events
+* has no array/string polyfills
 
 See the README_version1.md for version 1 documentation.
 
@@ -148,7 +149,7 @@ The original DOM classList if it exists.
 The className of the DOM element.
 
 Indexes (Array like functionality)
-----------------------------------
+-------------------------------
 
 `classlist-enhanced` is an array like.
 
