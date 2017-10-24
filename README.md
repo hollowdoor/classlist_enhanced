@@ -104,14 +104,7 @@ cl.on('toggle', (toggledClass, isToggled)=>{
 
 Other events can be set, but you'll have to emit them yourself.
 
-
-
-These are the extra fields for the **event** object.
-
--	event.name
--	event.elapsed (Shorter version of `elapsedTime`\)
-
-`event.name` stands for `animationName`, or `propertyName` depending if it's an animation event, or transition event.
+Add an event listener.
 
 ### off(event, listener)
 
