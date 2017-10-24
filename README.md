@@ -11,12 +11,13 @@ Version 2 differences
 
 Version 2:
 
-* uses `dom-get-element` for it's constructor
+* uses `dom-get-element` in it's constructor
 * doesn't have the `supports()` static method
 * is designed using es2015 syntax
 * has "add", "remove", and "toggle" events
 * uses normal transition/animation events
 * has no array/string polyfills
+* is more compact than version 1
 
 See the README_version1.md for version 1 documentation.
 
