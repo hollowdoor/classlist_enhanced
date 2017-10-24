@@ -1,6 +1,6 @@
 {
   "name": "classlist-enhanced",
-  "version": "1.0.6",
+  "version": "2.0.0",
   "description": "An enhanced classlist for the html DOM",
   "main": "dist/bundle.js",
   "directories": {
