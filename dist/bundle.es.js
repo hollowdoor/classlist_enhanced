@@ -1,4 +1,4 @@
-import moreEvents from 'more-events';
+import { Emitter } from 'more-events';
 import events from 'dom-eve';
 import _classList from 'dom-classlist';
 import arrayFrom from 'array-from';
@@ -66,14 +66,12 @@ var eventNames = (function (){
 
 var eventNames$1 = { eventNames: eventNames };
 
-var Emitter = moreEvents.Emitter;
-
-var ClassListEnhanced = (function (Emitter) {
+var ClassListEnhanced = (function (Emitter$$1) {
     function ClassListEnhanced(element, context){
         var this$1 = this;
         if ( context === void 0 ) context = document;
 
-        Emitter.call(this);
+        Emitter$$1.call(this);
         this.element = getElement(element, context);
         console.log('this.element ',this.element);
         this.length = 0;
@@ -100,8 +98,8 @@ var ClassListEnhanced = (function (Emitter) {
         };
     }
 
-    if ( Emitter ) ClassListEnhanced.__proto__ = Emitter;
-    ClassListEnhanced.prototype = Object.create( Emitter && Emitter.prototype );
+    if ( Emitter$$1 ) ClassListEnhanced.__proto__ = Emitter$$1;
+    ClassListEnhanced.prototype = Object.create( Emitter$$1 && Emitter$$1.prototype );
     ClassListEnhanced.prototype.constructor = ClassListEnhanced;
 
     var prototypeAccessors = { className: {} };

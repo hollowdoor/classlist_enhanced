@@ -1,68 +1,100 @@
 var classlistEnhanced = (function () {
 'use strict';
 
-//Most for use with gyre
-/*
-git remote add origin https://github.com/hollowdoor/more_events.git
-git push -u origin master
-*/
-function MoreEvents(context){
-    this.listeners = {};
-    this.__context = context || this;
-}
+var Handler = function Handler(name, listener, matchListener){
+    if ( matchListener === void 0 ) { matchListener = null; }
 
-MoreEvents.prototype = {
-    constructor: MoreEvents,
-    on: function(event, listener){
-        this.listeners[event] = this.listeners[event] || [];
-        this.listeners[event].push(listener);
-        return this;
-    },
-    one: function(event, listener){
-        function onceListener(){
-            listener.apply(this, arguments);
-            this.off(event, onceListener);
-            return this;
-        }
-        return this.on(event, onceListener);
-    },
-    emit: function(event){
-        var this$1 = this;
-
-        if(typeof this.listeners[event] === 'undefined' || !this.listeners[event].length)
-            { return this; }
-
-        var args = Array.prototype.slice.call(arguments, 1),
-            canRun = this.listeners[event].length;
-
-        do{
-            this$1.listeners[event][--canRun].apply(this$1.__context, args);
-        }while(canRun);
-
-        return this;
-    },
-    off: function(event, listener){
-        if(this.listeners[event] === undefined || !this.listeners[event].length)
-            { return this; }
-        this.listeners[event] = this.listeners[event].filter(function(item){
-            return item !== listener;
-        });
-        return this;
-    },
-    dispose: function(){
-        var this$1 = this;
-
-        for(var n in this$1){
-            this$1[n] = null;
-        }
+    this.name = name;
+    this.matchListener = this.listener = listener;
+    if(matchListener !== null){
+        this.matchListener = matchListener;
     }
 };
 
-var Emitter$1 = MoreEvents;
-
-var moreEvents = {
-	Emitter: Emitter$1
+var MoreEvents = function MoreEvents(context){
+    this.listeners = {};
+    this.__context = context === void 0 ? this : context;
 };
+MoreEvents.prototype.addListener = function addListener (name, listener, matchListener){
+    if(this.listeners[name] === void 0){
+        this.listeners[name] = [];
+    }
+    this.listeners[name].push(new Handler(name, listener, matchListener));
+
+    return this;
+};
+MoreEvents.prototype.removeListener = function removeListener (name, listener){
+        var this$1 = this;
+
+    if(this.listeners[name] === void 0 || !this.listeners[name].length)
+        { return this; }
+
+    for(var i=0; i<this.listeners[name].length; i++){
+        var current = this$1.listeners[name][i];
+        //The matchListener might be different
+        //than the actual listener
+        if(current.matchListener === listener){
+            this$1.listeners[name].splice(i, 1);
+            --i;
+        }
+    }
+
+    return this;
+};
+MoreEvents.prototype.emitListeners = function emitListeners (name){
+        var arguments$1 = arguments;
+
+        var this$1 = this;
+        var args = [], len = arguments.length - 1;
+        while ( len-- > 0 ) { args[ len ] = arguments$1[ len + 1 ]; }
+
+    if(this.listeners[name] === void 0 || !this.listeners[name].length) { return; }
+
+    for(var i=0; i<this.listeners[name].length; i++){
+        (this$1.listeners[name][i].listener)
+        .apply(this$1.__context, args);
+    }
+    return this;
+};
+MoreEvents.prototype.removeAll = function removeAll (name){
+    delete this.listeners[name];
+};
+MoreEvents.prototype.dispose = function dispose (){
+    this.listeners = this.__context = null;
+};
+
+var Emitter = (function (MoreEvents) {
+    function Emitter(context){
+        MoreEvents.call(this, context);
+    }
+
+    if ( MoreEvents ) { Emitter.__proto__ = MoreEvents; }
+    Emitter.prototype = Object.create( MoreEvents && MoreEvents.prototype );
+    Emitter.prototype.constructor = Emitter;
+    Emitter.prototype.on = function on (name, listener){
+        return this.addListener(name, listener);
+    };
+    Emitter.prototype.off = function off (name, listener){
+        return this.removeListener(name, listener);
+    };
+    Emitter.prototype.one = function one (name, listener){
+        return this.on(name, onceListener);
+    };
+    Emitter.prototype.emit = function emit (name){
+        var arguments$1 = arguments;
+
+        var args = [], len = arguments.length - 1;
+        while ( len-- > 0 ) { args[ len ] = arguments$1[ len + 1 ]; }
+
+        return (ref = this).emitListeners.apply(ref, [ name ].concat( args ));
+        var ref;
+    };
+    Emitter.prototype.clear = function clear (name){
+        this.removeAll(name);
+    };
+
+    return Emitter;
+}(MoreEvents));
 
 /*
 object-assign
@@ -713,14 +745,12 @@ var eventNames = (function (){
 
 var eventNames$1 = { eventNames: eventNames };
 
-var Emitter = moreEvents.Emitter;
-
-var ClassListEnhanced = (function (Emitter) {
+var ClassListEnhanced = (function (Emitter$$1) {
     function ClassListEnhanced(element, context){
         var this$1 = this;
         if ( context === void 0 ) context = document;
 
-        Emitter.call(this);
+        Emitter$$1.call(this);
         this.element = getElement(element, context);
         console.log('this.element ',this.element);
         this.length = 0;
@@ -747,8 +777,8 @@ var ClassListEnhanced = (function (Emitter) {
         };
     }
 
-    if ( Emitter ) ClassListEnhanced.__proto__ = Emitter;
-    ClassListEnhanced.prototype = Object.create( Emitter && Emitter.prototype );
+    if ( Emitter$$1 ) ClassListEnhanced.__proto__ = Emitter$$1;
+    ClassListEnhanced.prototype = Object.create( Emitter$$1 && Emitter$$1.prototype );
     ClassListEnhanced.prototype.constructor = ClassListEnhanced;
 
     var prototypeAccessors = { className: {} };

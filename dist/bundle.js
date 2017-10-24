@@ -2,7 +2,7 @@
 
 function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
 
-var moreEvents = _interopDefault(require('more-events'));
+var moreEvents = require('more-events');
 var events = _interopDefault(require('dom-eve'));
 var _classList = _interopDefault(require('dom-classlist'));
 var arrayFrom = _interopDefault(require('array-from'));
@@ -70,14 +70,12 @@ var eventNames = (function (){
 
 var eventNames$1 = { eventNames: eventNames };
 
-var Emitter = moreEvents.Emitter;
-
-var ClassListEnhanced = (function (Emitter) {
+var ClassListEnhanced = (function (Emitter$$1) {
     function ClassListEnhanced(element, context){
         var this$1 = this;
         if ( context === void 0 ) context = document;
 
-        Emitter.call(this);
+        Emitter$$1.call(this);
         this.element = getElement(element, context);
         console.log('this.element ',this.element);
         this.length = 0;
@@ -104,8 +102,8 @@ var ClassListEnhanced = (function (Emitter) {
         };
     }
 
-    if ( Emitter ) ClassListEnhanced.__proto__ = Emitter;
-    ClassListEnhanced.prototype = Object.create( Emitter && Emitter.prototype );
+    if ( Emitter$$1 ) ClassListEnhanced.__proto__ = Emitter$$1;
+    ClassListEnhanced.prototype = Object.create( Emitter$$1 && Emitter$$1.prototype );
     ClassListEnhanced.prototype.constructor = ClassListEnhanced;
 
     var prototypeAccessors = { className: {} };
@@ -161,7 +159,7 @@ var ClassListEnhanced = (function (Emitter) {
     Object.defineProperties( ClassListEnhanced.prototype, prototypeAccessors );
 
     return ClassListEnhanced;
-}(Emitter));
+}(moreEvents.Emitter));
 
 function classList(element, context){
     return new ClassListEnhanced(element, context);
